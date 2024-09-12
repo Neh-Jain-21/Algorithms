@@ -1,13 +1,22 @@
+use std::io;
+
 use rust_algos::stack::Stack;
 
 fn main() {
-    let mut stack_data = Stack::new();
+    let mut stack_data: Stack = Stack::new();
 
-    stack_data.push(12);
+    loop {
+        let mut choice = String::new();
 
-    stack_data.display();
+        println!("Enter choice");
 
-    stack_data.push(13);
+        io::stdin().read_line(&mut choice).expect("Read Failed!");
 
-    stack_data.display();
+        println!("Your choice is {}", choice);
+
+        match choice.as_str() {
+            "1" => stack_data.push(10),
+            &_ => break,
+        };
+    }
 }

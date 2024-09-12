@@ -24,11 +24,36 @@ impl Stack {
         self.top += 1;
     }
 
-    pub fn pop() {}
+    pub fn pop(&mut self) {
+        if self.top == -1 {
+            return println!("No data to pop!");
+        }
 
-    pub fn peep() {}
+        let usize_top: usize = usize::try_from(self.top + 1).unwrap();
 
-    pub fn change() {}
+        self.data[usize_top] = 0;
+        self.top -= 1;
+    }
+
+    pub fn peep(&self, index: i32) {
+        if index < 0 || index > (self.top) {
+            return println!("Invalid index");
+        }
+
+        let usize_index: usize = usize::try_from(index).unwrap();
+
+        println!("{} at index {}", self.data[usize_index], index);
+    }
+
+    pub fn change(&mut self, item: i32, index: i32) {
+        if index < 0 || index > (self.top) {
+            return println!("Invalid index");
+        }
+
+        let usize_index: usize = usize::try_from(index).unwrap();
+
+        self.data[usize_index] = item;
+    }
 
     pub fn display(&self) {
         if self.top == -1 {
