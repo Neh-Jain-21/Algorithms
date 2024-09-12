@@ -62,10 +62,18 @@ impl Stack {
 
         println!("Top is at: {}", self.top);
 
+        print!("[");
+
         for item in (0..(self.top + 1)).rev() {
             let usize_item: usize = usize::try_from(item).unwrap();
 
-            println!("{}", self.data[usize_item]);
+            if item != self.top {
+                print!("{}", self.data[usize_item]);
+            } else {
+                print!("{}, ", self.data[usize_item]);
+            }
         }
+
+        print!("]\n\n");
     }
 }
