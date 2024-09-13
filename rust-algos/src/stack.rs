@@ -1,3 +1,5 @@
+use crate::utils::read_and_parse_data_to_int;
+
 const MAX_SIZE: usize = 10;
 
 pub struct Stack {
@@ -6,14 +8,14 @@ pub struct Stack {
 }
 
 impl Stack {
-    pub fn new() -> Stack {
+    fn new() -> Stack {
         Stack {
             data: [0; MAX_SIZE],
             top: -1,
         }
     }
 
-    pub fn push(&mut self, item: i32) {
+    fn push(&mut self, item: i32) {
         if self.top == (MAX_SIZE - 1).try_into().unwrap() {
             return println!("Max size reached");
         }
@@ -22,9 +24,11 @@ impl Stack {
 
         self.data[usize_top] = item;
         self.top += 1;
+
+        println!("Inserted!");
     }
 
-    pub fn pop(&mut self) {
+    fn pop(&mut self) {
         if self.top == -1 {
             return println!("No data to pop!");
         }
@@ -33,9 +37,11 @@ impl Stack {
 
         self.data[usize_top] = 0;
         self.top -= 1;
+
+        println!("Removed!");
     }
 
-    pub fn peep(&self, index: i32) {
+    fn peep(&self, index: i32) {
         if index < 0 || index > (self.top) {
             return println!("Invalid index");
         }
@@ -45,35 +51,74 @@ impl Stack {
         println!("{} at index {}", self.data[usize_index], index);
     }
 
-    pub fn change(&mut self, item: i32, index: i32) {
-        if index < 0 || index > (self.top) {
+    fn change(&mut self, item: i32, index: i32) {
+        if index < 0 || index > (self.top + 1) {
             return println!("Invalid index");
         }
 
         let usize_index: usize = usize::try_from(index).unwrap();
 
         self.data[usize_index] = item;
+
+        println!("Changed!");
     }
 
-    pub fn display(&self) {
-        if self.top == -1 {
-            return println!("No Data");
-        }
+    fn display(&self) {
+        println!("Top => {}", self.top);
 
-        println!("Top is at: {}", self.top);
+        let usize_top: usize = usize::try_from(self.top + 1).unwrap();
 
-        print!("[");
+        println!("Data => {:?}", &self.data[0..usize_top]);
+    }
 
-        for item in (0..(self.top + 1)).rev() {
-            let usize_item: usize = usize::try_from(item).unwrap();
+    pub fn run() {
+        let mut stack_data: Stack = Self::new();
 
-            if item != self.top {
-                print!("{}", self.data[usize_item]);
-            } else {
-                print!("{}, ", self.data[usize_item]);
+        loop {
+            println!("\n-------------");
+            println!("1: Push");
+            println!("2: Pop");
+            println!("3: Peep");
+            println!("4: Change");
+            println!("5: Display");
+            println!("Other: Exit");
+            println!("-------------\n");
+
+            let is_continue: bool =
+                read_and_parse_data_to_int("Enter choice: ", |parsed_choice: i32| {
+                    match parsed_choice {
+                        1 => read_and_parse_data_to_int("Enter item: ", |parsed_item: i32| {
+                            stack_data.push(parsed_item);
+                            true
+                        }),
+                        2 => {
+                            stack_data.pop();
+                            true
+                        }
+                        3 => read_and_parse_data_to_int("Enter index: ", |parsed_index: i32| {
+                            stack_data.peep(parsed_index);
+                            true
+                        }),
+                        4 => read_and_parse_data_to_int("Enter index: ", |parsed_index: i32| {
+                            read_and_parse_data_to_int("Enter item: ", |parsed_item: i32| {
+                                stack_data.change(parsed_item, parsed_index);
+                                true
+                            })
+                        }),
+                        5 => {
+                            stack_data.display();
+                            true
+                        }
+                        _other => {
+                            println!("Bye!!\n");
+                            false
+                        }
+                    }
+                });
+
+            if !is_continue {
+                break;
             }
         }
-
-        print!("]\n\n");
     }
 }
