@@ -1,5 +1,6 @@
-use rust_algos::stack::Stack;
+use rust_algos::linked_list::linked_list::LinkedList;
 
 fn main() {
-    Stack::run();
+    // Stack::run();
+    LinkedList::run();
 }
