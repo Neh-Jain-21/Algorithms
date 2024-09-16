@@ -1,42 +1,52 @@
-pub struct LinkedList {
+type NodePointer = Option<Box<ListNode>>;
+
+struct ListNode {
     data: String,
-    next: Option<Box<LinkedList>>,
+    next: NodePointer,
+}
+
+pub struct LinkedList {
+    head: NodePointer,
 }
 
 impl LinkedList {
-    fn new(data: String) -> LinkedList {
-        LinkedList { data, next: None }
+    fn new() -> Self {
+        Self { head: None }
     }
 
     fn traverse(&self) {
-        let mut current: &LinkedList = self;
+        let mut head: &Option<Box<ListNode>> = &self.head;
 
         loop {
-            match &current.next {
-                Some(next) => {
-                    println!("{}", current.data);
+            match head {
+                Some(node) => {
+                    println!("{}", node.data);
 
-                    current = &next;
+                    head = &node.next;
                 }
                 None => break,
             }
         }
     }
 
+    fn insert_at_beginning(&self, data: String) {
+        let mut head: &Option<Box<ListNode>> = &self.head;
+
+        let new_node: Option<Box<ListNode>> = Some(Box::new(ListNode { data, next: head }));
+    }
+
     fn insert_at_end(&mut self, data: String) {
-        let mut current: &mut LinkedList = self;
-        let new_node: Option<Box<LinkedList>> = Some(Box::new(LinkedList {
-            data: data.to_string(),
-            next: None,
-        }));
+        let mut head: &mut Option<Box<ListNode>> = &mut self.head;
+        let new_node: Option<Box<ListNode>> = Some(Box::new(ListNode { data, next: None }));
 
         loop {
-            match current.next {
-                Some(next) => {
-                    current = next;
+            match head {
+                Some(node) => {
+                    head = &mut node.next;
                 }
                 None => {
-                    current.next = new_node;
+                    *head = new_node;
+                    println!("inserted {:?}", head.as_ref().unwrap().data);
                     break;
                 }
             }
@@ -44,8 +54,10 @@ impl LinkedList {
     }
 
     pub fn run() {
-        let mut list = LinkedList::new("10".to_owned());
+        let list: LinkedList = LinkedList::new();
 
-        list.insert_at_end("20".to_owned());
+        list.insert_at_beginning("10".to_owned());
+
+        list.traverse();
     }
 }
