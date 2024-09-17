@@ -29,10 +29,20 @@ impl LinkedList {
         }
     }
 
-    fn insert_at_beginning(&self, data: String) {
-        let mut head: &Option<Box<ListNode>> = &self.head;
+    fn insert_at_beginning(&mut self, data: String) {
+        // let mut head: &Option<Box<ListNode>> = &self.head;
 
-        let new_node: Option<Box<ListNode>> = Some(Box::new(ListNode { data, next: head }));
+        let mut new_node: Box<ListNode> = Box::new(ListNode { data, next: None });
+
+        if self.head.is_some() {
+            unsafe {
+                new_node.next = self.head;
+            }
+
+            self.head = Some(new_node);
+
+            // self.head = Some(ptr);
+        }
     }
 
     fn insert_at_end(&mut self, data: String) {
@@ -54,7 +64,7 @@ impl LinkedList {
     }
 
     pub fn run() {
-        let list: LinkedList = LinkedList::new();
+        let mut list: LinkedList = LinkedList::new();
 
         list.insert_at_beginning("10".to_owned());
 
