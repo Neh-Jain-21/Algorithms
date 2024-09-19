@@ -54,6 +54,23 @@ impl LinkedList {
         }
     }
 
+    fn remove_from_end(&mut self) {
+        let mut head: &mut Option<Box<ListNode>> = &mut self.head;
+
+        loop {
+            match head {
+                Some(node) => {
+                    head = &mut node.next;
+                }
+                None => {
+                    println!("Inserted!");
+
+                    break;
+                }
+            }
+        }
+    }
+
     fn traverse(&self) {
         let mut head: &Option<Box<ListNode>> = &self.head;
 
