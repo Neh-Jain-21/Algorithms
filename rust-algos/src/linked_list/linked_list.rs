@@ -27,11 +27,13 @@ impl LinkedList {
         println!("Inserted!");
     }
 
-    fn remove_from_beginning(&mut self) -> Option<String> {
+    fn remove_from_beginning(&mut self) {
         self.head.take().map(|node: Box<ListNode>| {
             self.head = node.next;
             node.data
-        })
+        });
+
+        println!("Removed~");
     }
 
     fn insert_at_end(&mut self, data: String) {
@@ -61,10 +63,13 @@ impl LinkedList {
             match head {
                 Some(node) => {
                     head = &mut node.next;
+
+                    if head.as_ref().unwrap().next.is_none() {
+                        *head = None;
+                        println!("Removed!");
+                    }
                 }
                 None => {
-                    println!("Inserted!");
-
                     break;
                 }
             }
@@ -94,7 +99,8 @@ impl LinkedList {
             println!("1: Insert at beginning");
             println!("2: Insert at end");
             println!("3: Remove from beginning");
-            println!("4: Display");
+            println!("4: Remove from end");
+            println!("5: Display");
             println!("Other: Exit");
             println!("-------------\n");
 
@@ -114,6 +120,10 @@ impl LinkedList {
                             true
                         }
                         4 => {
+                            list.remove_from_end();
+                            true
+                        }
+                        5 => {
                             list.traverse();
                             true
                         }
