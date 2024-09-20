@@ -25,6 +25,12 @@ impl ListNode {
     }
 }
 
+impl Drop for DoublyLinkedList {
+    fn drop(&mut self) {
+        while self.remove_from_beginning().is_some() {}
+    }
+}
+
 impl DoublyLinkedList {
     fn new() -> Self {
         Self {
@@ -38,10 +44,10 @@ impl DoublyLinkedList {
 
         match self.head.take() {
             Some(head) => {
-                head.borrow_mut().prev = Some(new_head.clone());
-                new_head.borrow_mut().next = Some(head);
+                head.borrow_mut().prev = Some(new_head.clone()); // +1
+                new_head.borrow_mut().next = Some(head); // +1
 
-                self.head = Some(new_head);
+                self.head = Some(new_head); // +1 -1
             }
             None => {
                 self.head = Some(new_head.clone());
@@ -50,68 +56,62 @@ impl DoublyLinkedList {
         }
     }
 
-    fn remove_from_beginning(&mut self) {
-        self.head.take().map(|node: Box<ListNode>| {
-            self.head = node.next;
-            node.data
-        });
+    fn remove_from_beginning(&mut self) -> Option<String> {
+        self.head.take().map(|head: Rc<RefCell<ListNode>>| {
+            match head.borrow_mut().next.take() {
+                Some(new_head) => {
+                    new_head.borrow_mut().prev.take();
+                    self.head = Some(new_head);
+                }
+                None => {
+                    self.tail.take();
+                }
+            };
 
-        println!("Removed~");
+            Rc::try_unwrap(head).ok().unwrap().into_inner().data
+        })
     }
 
     fn insert_at_end(&mut self, data: String) {
-        let mut head: &mut Option<Box<ListNode>> = &mut self.head;
-        let new_node: Option<Box<ListNode>> = Some(Box::new(ListNode {
-            data,
-            prev: None,
-            next: None,
-        }));
+        let new_tail: Rc<RefCell<ListNode>> = ListNode::new(data);
 
-        loop {
-            match head {
-                Some(node) => {
-                    head = &mut node.next;
-                }
-                None => {
-                    new_node.unwrap().prev = head;
+        match self.tail.take() {
+            Some(tail) => {
+                tail.borrow_mut().next = Some(new_tail.clone());
+                new_tail.borrow_mut().prev = Some(tail);
 
-                    *head = new_node;
-
-                    println!("Inserted!");
-
-                    break;
-                }
+                self.tail = Some(new_tail);
+            }
+            None => {
+                self.head = Some(new_tail.clone());
+                self.tail = Some(new_tail);
             }
         }
     }
 
-    fn remove_from_end(&mut self) {
-        let mut head: &mut Option<Box<ListNode>> = &mut self.head;
-
-        loop {
-            match head {
-                Some(node) => {
-                    head = &mut node.next;
-
-                    if head.as_ref().unwrap().next.is_none() {
-                        *head = None;
-                        println!("Removed!");
-                    }
+    fn remove_from_end(&mut self) -> Option<String> {
+        self.tail.take().map(|tail: Rc<RefCell<ListNode>>| {
+            match tail.borrow_mut().prev.take() {
+                Some(new_tail) => {
+                    new_tail.borrow_mut().next.take();
+                    self.tail = Some(new_tail);
                 }
                 None => {
-                    break;
+                    self.head.take();
                 }
-            }
-        }
+            };
+
+            Rc::try_unwrap(tail).ok().unwrap().into_inner().data
+        })
     }
 
     fn traverse(&self) {
-        let mut head: &Option<Box<ListNode>> = &self.head;
+        let mut head: &Option<Rc<RefCell<ListNode>>> = &self.head;
 
         loop {
             match head {
                 Some(node) => {
-                    println!("{}", node.data);
+                    println!("{}", node.);
 
                     head = &node.next;
                 }
