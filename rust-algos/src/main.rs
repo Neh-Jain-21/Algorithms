@@ -1,7 +1,8 @@
-use rust_algos::linked_list::doubly_linked_list::DoublyLinkedList;
+use rust_algos::queue::Queue;
 
 fn main() {
     // Stack::run();
     // LinkedList::run();
-    DoublyLinkedList::run();
+    // DoublyLinkedList::run();
+    Queue::run();
 }
