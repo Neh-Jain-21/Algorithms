@@ -105,20 +105,7 @@ impl DoublyLinkedList {
         })
     }
 
-    fn traverse(&self) {
-        let mut head: &Option<Rc<RefCell<ListNode>>> = &self.head;
-
-        loop {
-            match head {
-                Some(node) => {
-                    println!("{}", node.);
-
-                    head = &node.next;
-                }
-                None => break,
-            }
-        }
-    }
+    fn traverse(&self) {}
 
     pub fn run() {
         let mut list: DoublyLinkedList = DoublyLinkedList::new();
