@@ -1,5 +1,4 @@
-pub mod linked_list;
-pub mod queue;
-pub mod stack;
+pub mod data_structures;
+pub mod sorting;
 pub mod test;
 pub mod utils;

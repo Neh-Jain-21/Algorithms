@@ -1,10 +1,9 @@
-use rust_algos::queue::Queue;
+use rust_algos::sorting::bubble_sort::{bubble_sort, MAX_SIZE};
 
 fn main() {
-    // Stack::run();
-    // LinkedList::run();
-    // DoublyLinkedList::run();
-    Queue::run();
+    let mut data: [i32; MAX_SIZE] = [0, 10, 40, 30, 20, 80, 70, 60, 100, 50];
 
-    // test();
+    bubble_sort(&mut data);
+
+    println!("{:?}", data);
 }
