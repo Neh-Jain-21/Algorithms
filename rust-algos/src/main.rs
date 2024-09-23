@@ -1,10 +1,10 @@
-use rust_algos::test::test;
+use rust_algos::queue::Queue;
 
 fn main() {
     // Stack::run();
     // LinkedList::run();
     // DoublyLinkedList::run();
-    // Queue::run();
+    Queue::run();
 
-    test();
+    // test();
 }

@@ -18,9 +18,11 @@ impl Queue {
     }
 
     fn enqueue(&mut self, item: i32) {
+        self.rear += 1;
+
         let usize_rear: usize = usize::try_from(self.rear).unwrap();
 
-        if usize_rear > MAX_SIZE {
+        if usize_rear >= MAX_SIZE {
             return println!("Queue limit reached!");
         }
 
@@ -28,15 +30,19 @@ impl Queue {
             self.front = 0;
         }
 
-        self.rear += 1;
         self.data[usize_rear] = item;
 
         println!("Inserted!");
     }
 
     fn dequeue(&mut self) {
-        if self.front == self.rear {
-            return println!("No data to pop!");
+        if self.front == self.rear || self.front == -1 {
+            println!("No data to pop!");
+
+            self.front = -1;
+            self.rear = -1;
+
+            return;
         }
 
         let usize_top: usize = usize::try_from(self.front).unwrap();
@@ -48,6 +54,10 @@ impl Queue {
     }
 
     fn display(&self) {
+        if self.front == -1 || self.rear == -1 {
+            return println!("Data => []");
+        }
+
         let usize_front: usize = usize::try_from(self.front).unwrap();
         let usize_rear: usize = usize::try_from(self.rear).unwrap();
 
