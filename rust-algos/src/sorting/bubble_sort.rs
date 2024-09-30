@@ -1,6 +1,6 @@
-pub const MAX_SIZE: usize = 10;
+pub const MAX_BUBBLE_SORT_SIZE: usize = 10;
 
-pub fn bubble_sort<T>(data: &mut [T; MAX_SIZE])
+pub fn bubble_sort<T>(data: &mut [T; MAX_BUBBLE_SORT_SIZE])
 where
     T: Ord,
 {

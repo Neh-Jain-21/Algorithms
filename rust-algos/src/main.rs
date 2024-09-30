@@ -1,12 +1,8 @@
-use rust_algos::sorting::{
-    bubble_sort::{bubble_sort, MAX_SIZE},
-    merge_sort::{self, merge_sort},
-};
+use rust_algos::sorting::merge_sort::{merge_sort, MAX_MERGE_SORT_SIZE};
 
 fn main() {
-    let mut data: [i32; MAX_SIZE] = [0, 10, 40, 30, 20, 80, 70, 60, 100, 50];
+    let mut data: [i32; MAX_MERGE_SORT_SIZE] = [0, 10, 40, 30];
 
-    bubble_sort(&mut data);
     merge_sort(&mut data);
 
     println!("{:?}", data);
