@@ -1,51 +1,59 @@
-pub const MAX_MERGE_SORT_SIZE: usize = 4;
+pub const MAX_MERGE_SORT_SIZE: usize = 6;
 
-fn sort(data: &mut [i32; MAX_MERGE_SORT_SIZE], lower_bound: i32, upper_bound: i32, mid: i32) {
-    let mut i: i32 = lower_bound;
-    let mut j: i32 = mid + 1;
-    let mut k: i32 = lower_bound;
-    let mut temp: [i32; MAX_MERGE_SORT_SIZE] = [0, 0, 0, 0];
+fn merge(arr: &mut [i32; MAX_MERGE_SORT_SIZE], left: i32, mid: i32, right: i32) {
+    let n1: i32 = mid - left + 1;
+    let n2: i32 = right - mid;
 
-    while i <= mid && j <= upper_bound {
-        if data[i as usize] < data[j as usize] {
-            temp[k as usize] = data[i as usize];
+    let mut l: [i32; MAX_MERGE_SORT_SIZE] = [0, 0, 0, 0, 0, 0];
+    let mut r: [i32; MAX_MERGE_SORT_SIZE] = [0, 0, 0, 0, 0, 0];
+
+    for i in 0..(n1 - 1) {
+        l[i as usize] = arr[(left + i) as usize];
+    }
+
+    for j in 0..(n2 - 1) {
+        r[j as usize] = arr[(mid + 1 + j) as usize];
+    }
+
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = left;
+
+    while i < n1 && j < n2 {
+        if l[i as usize] <= r[j as usize] {
+            arr[k as usize] = l[i as usize];
             i += 1;
         } else {
-            temp[k as usize] = data[j as usize];
+            arr[k as usize] = r[j as usize];
             j += 1;
         }
 
         k += 1;
     }
 
-    while i <= mid {
-        temp[k as usize] = data[i as usize];
+    while i < n1 {
+        arr[k as usize] = l[i as usize];
         i += 1;
         k += 1;
     }
 
-    while j <= upper_bound {
-        temp[k as usize] = data[j as usize];
+    while j < n2 {
+        arr[k as usize] = r[j as usize];
         j += 1;
         k += 1;
     }
-
-    for i in lower_bound..upper_bound + 1 {
-        data[i as usize] = temp[i as usize];
-    }
 }
 
-pub fn merge_sort(data: &mut [i32; MAX_MERGE_SORT_SIZE], lb: Option<i32>, up: Option<i32>) {
-    let total_length: i32 = data.len().try_into().unwrap();
-
-    let lower_bound: i32 = lb.unwrap_or(0);
-    let upper_bound: i32 = up.unwrap_or(total_length);
-
-    if lower_bound < upper_bound {
-        let mid: i32 = (lower_bound + upper_bound) / 2;
-
-        merge_sort(data, Some(lower_bound), Some(mid));
-        merge_sort(data, Some(mid + 1), Some(upper_bound));
-        sort(data, lower_bound, upper_bound - 1, mid);
+pub fn merge_sort(arr: &mut [i32; MAX_MERGE_SORT_SIZE], left: i32, right: i32) {
+    if left >= right {
+        return;
     }
+
+    let mid: i32 = (((left + (right - left)) / 2) as f32).floor() as i32;
+
+    merge_sort(arr, left, mid);
+    merge_sort(arr, mid + 1, right);
+    merge(arr, left, mid, right);
+
+    println!("{:?}", arr);
 }
